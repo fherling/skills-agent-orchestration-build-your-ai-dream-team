@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Pulse</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <h1>Project Pulse Dashboard</h1>
+    <p>Real-time overview of active projects and priorities.</p>
+  </header>
+
+  <main class="dashboard" id="project-list" aria-live="polite">
+    <!-- Coder: The rendered project cards will be appended here -->
+    <p class="dashboard__loading">Loading projects...</p>
+  </main>
+
+  <template id="project-card-template">
+    <article class="project-card" tabindex="0">
+      <header class="project-card__header">
+        <h2 class="project-card__name"></h2>
+        <div class="project-card__badges">
+          <span class="project-card__status" data-status=""></span>
+          <span class="project-card__priority" data-priority=""></span>
+        </div>
+      </header>
+      
+      <div class="project-card__body">
+        <p class="project-card__summary"></p>
+        <div class="project-card__meta">
+          <p><strong>Owner:</strong> <span class="project-card__owner"></span></p>
+          <p><strong>Recent Activity:</strong> <span class="project-card__activity"></span></p>
+        </div>
+      </div>
+    </article>
+  </template>
+
+  <!-- TODO(Coder): fetch and render project-data.json -->
+  <!-- Wire up the template above using the json file. -->
+  <script id="render-script">
+    (function () {
+      const dashboard = document.querySelector('#project-list');
+      const template = document.querySelector('#project-card-template');
+      const loadingMessage = dashboard.querySelector('.dashboard__loading');
+
+      function clearDashboard() {
+        if (loadingMessage) {
+          loadingMessage.remove();
+        }
+      }
+
+      function showMessage(message, isError) {
+        clearDashboard();
+
+        const messageElement = document.createElement('p');
+        messageElement.className = 'dashboard__loading';
+        messageElement.textContent = message;
+
+        if (isError) {
+          messageElement.setAttribute('role', 'alert');
+        }
+
+        dashboard.appendChild(messageElement);
+      }
+
+      function setText(card, selector, value) {
+        const element = card.querySelector(selector);
+
+        if (element) {
+          element.textContent = value || '';
+        }
+
+        return element;
+      }
+
+      function renderProject(project) {
+        const fragment = template.content.cloneNode(true);
+        const card = fragment.querySelector('.project-card');
+
+        setText(card, '.project-card__name', project.name);
+        setText(card, '.project-card__owner', project.owner);
+        setText(card, '.project-card__activity', project.recentActivity);
+        setText(card, '.project-card__summary', project.summary);
+
+        const statusElement = setText(card, '.project-card__status', project.status);
+        const priorityElement = setText(card, '.project-card__priority', project.priority);
+
+        if (statusElement) {
+          statusElement.dataset.status = project.status || '';
+        }
+
+        if (priorityElement) {
+          priorityElement.dataset.priority = project.priority || '';
+        }
+
+        dashboard.appendChild(fragment);
+      }
+
+      async function loadProjects() {
+        try {
+          const response = await fetch('./project-data.json');
+
+          if (!response.ok) {
+            throw new Error(`Unable to load project data (${response.status} ${response.statusText})`);
+          }
+
+          const data = await response.json();
+          const projects = Array.isArray(data.projects) ? data.projects : [];
+
+          clearDashboard();
+
+          if (projects.length === 0) {
+            showMessage('No projects are available yet.', false);
+            return;
+          }
+
+          projects.forEach(renderProject);
+        } catch (error) {
+          showMessage('Unable to load projects. Please run the Project Pulse launch configuration and try again.', true);
+          console.error('Project Pulse render error:', error);
+        }
+      }
+
+      loadProjects();
+    }());
+  </script>
+</body>
+</html>

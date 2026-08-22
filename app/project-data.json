@@ -1,0 +1,44 @@
+{
+  "projects": [
+    {
+      "name": "Atlas Customer Portal",
+      "owner": "Mona Kane",
+      "status": "Active",
+      "recentActivity": "Completed accessibility review for the new account overview flow.",
+      "priority": "High",
+      "summary": "Modernizes the customer self-service experience ahead of the enterprise rollout."
+    },
+    {
+      "name": "Beacon Analytics Refresh",
+      "owner": "Priya Shah",
+      "status": "At Risk",
+      "recentActivity": "Data warehouse migration surfaced delayed dashboard dependencies.",
+      "priority": "Medium",
+      "summary": "Updates the reporting layer so teams can track product adoption more quickly."
+    },
+    {
+      "name": "Nimbus Mobile Sync",
+      "owner": "Jordan Lee",
+      "status": "Blocked",
+      "recentActivity": "Waiting on vendor approval for background sync API access.",
+      "priority": "High",
+      "summary": "Improves offline reliability for field teams using mobile devices."
+    },
+    {
+      "name": "Orion Onboarding Kit",
+      "owner": "Sam Rivera",
+      "status": "Complete",
+      "recentActivity": "Published final templates and handed off documentation to enablement.",
+      "priority": "Low",
+      "summary": "Provides reusable onboarding assets for new internal product teams."
+    },
+    {
+      "name": "Pulse Feedback Loop",
+      "owner": "Avery Chen",
+      "status": "Active",
+      "recentActivity": "Launched the first in-app survey experiment to 15% of beta users.",
+      "priority": "Medium",
+      "summary": "Collects contributor feedback directly inside the dashboard workflow."
+    }
+  ]
+}
